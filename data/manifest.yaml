@@ -1,0 +1,14 @@
+# Chrysalis — Card Manifest
+# Source of truth for all cards in the knowledge base.
+# Workflows read this to know what to load; update it whenever a card is created or changed.
+
+cards:
+  - id: data/profile/me
+    type: personal_profile
+    stage: active
+    summary: "Anand Yadav — Senior IAM/Identity PM, 19+ years, ex-Intuit/TTD/Microsoft/Google. San Diego."
+    priority: always_load
+    tags: [profile]
+    updated: 2026-06-01
+    next_action: null
+    has_temp: false
