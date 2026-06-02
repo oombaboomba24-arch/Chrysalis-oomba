@@ -14,7 +14,7 @@ cards:
     has_temp: false
 
   # ── ACTIVE INTERVIEWS ────────────────────────────────────────────────────
-  - id: data/pipeline/adobe
+  - id: pipeline/adobe
     type: company_pipeline
     stage: interviewing
     summary: "Principal PM Identity (R164735). Interview CONFIRMED June 10 at 11am PT. Marissa Rodgers recruiter."
@@ -24,7 +24,7 @@ cards:
     next_action: "URGENT: Run prep-planner for June 10 interview"
     has_temp: false
 
-  - id: data/pipeline/chime
+  - id: pipeline/chime
     type: company_pipeline
     stage: interviewing
     summary: "Remote identity & auth PM. Interview CONFIRMED Friday June 5. Winnie Szu coordinator."
@@ -34,7 +34,7 @@ cards:
     next_action: "URGENT: Prep today — interview Friday June 5"
     has_temp: false
 
-  - id: data/pipeline/github
+  - id: pipeline/github
     type: company_pipeline
     stage: interviewing
     summary: "Unknown PM role. NDA signed. Tayler Wike sent pick-a-time scheduling link."
@@ -44,7 +44,7 @@ cards:
     next_action: "Pick interview time via Tayler Wike booking link"
     has_temp: false
 
-  - id: data/pipeline/idme
+  - id: pipeline/idme
     type: company_pipeline
     stage: interviewing
     summary: "Staff PM. HM interview confirmed by Addison Turner via guide.co."
@@ -54,7 +54,7 @@ cards:
     next_action: "Confirm interview time with Addison Turner"
     has_temp: false
 
-  - id: data/pipeline/semperis
+  - id: pipeline/semperis
     type: company_pipeline
     stage: interviewing
     summary: "PM Permissions & Delegation. Interview reminder from Kriti Gupta (kriti.gupta@semperis.com)."
@@ -64,7 +64,7 @@ cards:
     next_action: "Confirm interview time — reminder received from Kriti Gupta"
     has_temp: false
 
-  - id: data/pipeline/openloop-health
+  - id: pipeline/openloop-health
     type: company_pipeline
     stage: interviewing
     summary: "Remote product role owning identity & auth. Interview reminder from Victoria Syvret."
@@ -75,7 +75,7 @@ cards:
     has_temp: false
 
   # ── ACTIVE DISCUSSIONS ───────────────────────────────────────────────────
-  - id: data/pipeline/okta
+  - id: pipeline/okta
     type: company_pipeline
     stage: screening
     summary: "Principal PM AI. Interview request from Heather Merrell (heather.merrell@okta.com)."
@@ -85,7 +85,7 @@ cards:
     next_action: "Respond to Heather Merrell to schedule screening"
     has_temp: false
 
-  - id: data/pipeline/paypal
+  - id: pipeline/paypal
     type: company_pipeline
     stage: screening
     summary: "Sr Lead PM Identity. Sudeshna Datta asking about Intuit last day — serious hire signal."
@@ -95,7 +95,7 @@ cards:
     next_action: "Respond to Sudeshna Datta — confirm Intuit last day and availability"
     has_temp: false
 
-  - id: data/pipeline/gofundme
+  - id: pipeline/gofundme
     type: company_pipeline
     stage: screening
     summary: "Unknown PM role. Active discussion with Golnar Amery. Meeting proposed at 2:30pm."
@@ -105,7 +105,7 @@ cards:
     next_action: "Confirm 2:30pm meeting with Golnar Amery"
     has_temp: false
 
-  - id: data/pipeline/intuit-internal
+  - id: pipeline/intuit-internal
     type: company_pipeline
     stage: screening
     summary: "Internal application. Zoe Lloyd trying to reach Adolfo (HM). No update yet."
@@ -116,7 +116,7 @@ cards:
     has_temp: false
 
   # ── APPLIED ──────────────────────────────────────────────────────────────
-  - id: data/pipeline/amazon
+  - id: pipeline/amazon
     type: company_pipeline
     stage: applied
     summary: "Principal PM Technical — Quick Identity, Governance, and Security. Applied June 1."
@@ -126,7 +126,7 @@ cards:
     next_action: "Monitor for recruiter outreach"
     has_temp: false
 
-  - id: data/pipeline/salesforce
+  - id: pipeline/salesforce
     type: company_pipeline
     stage: applied
     summary: "Sr PM Customer Health Platform. Applied via Workday June 1."
@@ -136,7 +136,7 @@ cards:
     next_action: "Monitor for recruiter outreach"
     has_temp: false
 
-  - id: data/pipeline/scotiabank
+  - id: pipeline/scotiabank
     type: company_pipeline
     stage: applied
     summary: "Applied to IAM PM + Global Head CIAM / Enterprise Security. Both June 1."

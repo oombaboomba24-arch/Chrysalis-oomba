@@ -5,7 +5,7 @@ priority: always_load
 updated: 2026-06-01
 ---
 
-# My Profile
+# Anand Yadav
 
 ## Professional Background
 Anand Yadav is a product leader with 19+ years spanning identity, authentication, IAM, AI integrations, and platform products. Most recently Senior Staff PM at Intuit (2025–2026), where he co-led Agentic Identity strategy for MCP-based integrations with OpenAI and Anthropic ecosystems using OAuth 2.0, and drove a new QuickBooks mobile sign-in experience reaching 20M+ monthly users. Before that, he was Product Lead for OpenPass at The Trade Desk — growing The Trade Desk's consumer identity and authentication product from zero to 150,000+ users in under a year. He spent seven years at Microsoft across Azure Identity/IAM (Senior PM) and Windows Server Active Directory (Senior SWE), launched key features including ADFS Help and Azure AD Password Protection, and holds an MBA from the University of Washington Foster School of Business. He brings engineering-level fluency — having built full-stack products and AI-native PM systems independently — and is known for translating complex identity problems into scalable strategy and measurable outcomes.
