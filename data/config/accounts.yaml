@@ -10,26 +10,27 @@ email:
       address: anand.yadav85@outlook.com
       mcp: apple-mail
       primary: false
-      notes: "Job search inbox. Set up in Mail.app. Apple Mail MCP must be active in Claude Code session to auto-sweep."
+      notes: "Job search inbox. Restart Claude Code to activate Apple Mail MCP."
     - provider: gmail
       address: oomba.boomba24@gmail.com
-      mcp: none
+      mcp: gmail
       primary: true
-      notes: "Primary calendar account. Gmail MCP not yet connected — paste signals manually or install Gmail MCP connector."
+      notes: "Primary job search inbox. Gmail MCP active."
 
 # ─────────────────────────────────────────────────────────────────────────────
 calendar:
-  # Apple Calendar aggregates iCloud, Exchange, and Google sources.
-  # NOTE: Two calendars are both named "Calendar" — one Outlook, one Google.
-  # ACTION REQUIRED: Rename the Google calendar in Calendar.app (e.g. "Google — Anand")
-  # then update write_target below to match the new name.
+  # Google Calendar MCP is connected — prep blocks written via API directly.
+  google_calendar:
+    mcp: google_calendar
+    personal_calendar_id: "oomba.boomba24@gmail.com"
+
+  # Also read from Apple Calendar via JXA for any events not in Google Calendar.
   read_names:
-    - "Calendar"       # reads both — dedup_by handles overlaps
+    - "Calendar"
 
   # Write target for prep blocks and debrief reminders.
-  # UPDATE THIS once you rename the Google calendar in Calendar.app.
-  write_target: "Calendar"
-  write_mechanism: jxa
+  write_target: "oomba.boomba24@gmail.com"
+  write_mechanism: google_calendar_mcp
 
   # Deduplication strategy when reading from multiple source calendars.
   dedup_by: title_date
