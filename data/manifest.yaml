@@ -9,6 +9,139 @@ cards:
     summary: "Anand Yadav — Senior IAM/Identity PM, 19+ years, ex-Intuit/TTD/Microsoft/Google. San Diego."
     priority: always_load
     tags: [profile]
-    updated: 2026-06-01
+    updated: 2026-06-02
     next_action: null
+    has_temp: false
+
+  # ── ACTIVE INTERVIEWS ────────────────────────────────────────────────────
+  - id: data/pipeline/adobe
+    type: company_pipeline
+    stage: interviewing
+    summary: "Principal PM Identity (R164735). Interview CONFIRMED June 10 at 11am PT. Marissa Rodgers recruiter."
+    priority: high
+    tags: [enterprise-software, identity, creative-cloud, saas]
+    updated: 2026-06-02
+    next_action: "URGENT: Run prep-planner for June 10 interview"
+    has_temp: false
+
+  - id: data/pipeline/chime
+    type: company_pipeline
+    stage: interviewing
+    summary: "Remote identity & auth PM. Interview CONFIRMED Friday June 5. Winnie Szu coordinator."
+    priority: high
+    tags: [fintech, neobank, consumer-identity, ipo]
+    updated: 2026-06-02
+    next_action: "URGENT: Prep today — interview Friday June 5"
+    has_temp: false
+
+  - id: data/pipeline/github
+    type: company_pipeline
+    stage: interviewing
+    summary: "Unknown PM role. NDA signed. Tayler Wike sent pick-a-time scheduling link."
+    priority: high
+    tags: [developer-tools, enterprise, security, identity, microsoft]
+    updated: 2026-06-02
+    next_action: "Pick interview time via Tayler Wike booking link"
+    has_temp: false
+
+  - id: data/pipeline/idme
+    type: company_pipeline
+    stage: interviewing
+    summary: "Staff PM. HM interview confirmed by Addison Turner via guide.co."
+    priority: high
+    tags: [identity-verification, government, consumer-identity, iam]
+    updated: 2026-06-02
+    next_action: "Confirm interview time with Addison Turner"
+    has_temp: false
+
+  - id: data/pipeline/semperis
+    type: company_pipeline
+    stage: interviewing
+    summary: "PM Permissions & Delegation. Interview reminder from Kriti Gupta (kriti.gupta@semperis.com)."
+    priority: high
+    tags: [cybersecurity, identity-security, active-directory, enterprise, itdr]
+    updated: 2026-06-02
+    next_action: "Confirm interview time — reminder received from Kriti Gupta"
+    has_temp: false
+
+  - id: data/pipeline/openloop-health
+    type: company_pipeline
+    stage: interviewing
+    summary: "Remote product role owning identity & auth. Interview reminder from Victoria Syvret."
+    priority: high
+    tags: [telehealth, healthtech, consumer-identity, remote]
+    updated: 2026-06-02
+    next_action: "Confirm interview details with Victoria Syvret"
+    has_temp: false
+
+  # ── ACTIVE DISCUSSIONS ───────────────────────────────────────────────────
+  - id: data/pipeline/okta
+    type: company_pipeline
+    stage: screening
+    summary: "Principal PM AI. Interview request from Heather Merrell (heather.merrell@okta.com)."
+    priority: high
+    tags: [identity, iam, enterprise, saas, ciam, ai-identity]
+    updated: 2026-06-02
+    next_action: "Respond to Heather Merrell to schedule screening"
+    has_temp: false
+
+  - id: data/pipeline/paypal
+    type: company_pipeline
+    stage: screening
+    summary: "Sr Lead PM Identity. Sudeshna Datta asking about Intuit last day — serious hire signal."
+    priority: high
+    tags: [fintech, payments, consumer-identity, enterprise, iam]
+    updated: 2026-06-02
+    next_action: "Respond to Sudeshna Datta — confirm Intuit last day and availability"
+    has_temp: false
+
+  - id: data/pipeline/gofundme
+    type: company_pipeline
+    stage: screening
+    summary: "Unknown PM role. Active discussion with Golnar Amery. Meeting proposed at 2:30pm."
+    priority: medium
+    tags: [consumer-platform, identity, fundraising]
+    updated: 2026-06-02
+    next_action: "Confirm 2:30pm meeting with Golnar Amery"
+    has_temp: false
+
+  - id: data/pipeline/intuit-internal
+    type: company_pipeline
+    stage: screening
+    summary: "Internal application. Zoe Lloyd trying to reach Adolfo (HM). No update yet."
+    priority: medium
+    tags: [fintech, internal-application, identity]
+    updated: 2026-06-02
+    next_action: "Follow up with Zoe Lloyd this week"
+    has_temp: false
+
+  # ── APPLIED ──────────────────────────────────────────────────────────────
+  - id: data/pipeline/amazon
+    type: company_pipeline
+    stage: applied
+    summary: "Principal PM Technical — Quick Identity, Governance, and Security. Applied June 1."
+    priority: medium
+    tags: [cloud, enterprise, identity, aws, agentic-ai]
+    updated: 2026-06-02
+    next_action: "Monitor for recruiter outreach"
+    has_temp: false
+
+  - id: data/pipeline/salesforce
+    type: company_pipeline
+    stage: applied
+    summary: "Sr PM Customer Health Platform. Applied via Workday June 1."
+    priority: medium
+    tags: [enterprise-saas, crm, customer-success]
+    updated: 2026-06-02
+    next_action: "Monitor for recruiter outreach"
+    has_temp: false
+
+  - id: data/pipeline/scotiabank
+    type: company_pipeline
+    stage: applied
+    summary: "Applied to IAM PM + Global Head CIAM / Enterprise Security. Both June 1."
+    priority: medium
+    tags: [banking, iam, ciam, enterprise, canada]
+    updated: 2026-06-02
+    next_action: "Monitor for recruiter outreach"
     has_temp: false
