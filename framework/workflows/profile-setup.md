@@ -34,7 +34,16 @@ is handled separately by `accounts-setup.md`.
 
 ### Step 1 — Request the resume file
 
-Say exactly this to the user:
+**Defense-in-depth: run the Repository safety gate first.** Before asking for
+anything, run `git remote get-url origin 2>/dev/null || echo "NO_ORIGIN"`. If
+the remote matches `*notbotanand/Chrysalis(.git)?$` (the public template, not
+a private fork like `your-handle/Chrysalis`), stop and follow the gate in
+`CLAUDE.md → Repository safety gate`. Do not write the profile to a template
+remote. This is the first write-capable workflow in the `Onboard me` chain —
+catching the gate violation here prevents personal data from landing on the
+template's origin.
+
+Then say exactly this to the user:
 
 > "To set up your Chrysalis profile, please attach your resume file.
 > PDF works best, but a Word doc is fine too."

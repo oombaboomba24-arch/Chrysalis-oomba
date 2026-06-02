@@ -39,32 +39,90 @@ If the profile has content: extract the following to use throughout this workflo
 Read `data/manifest.yaml`. Note any company cards that already exist.
 Do not create duplicate cards for companies already tracked.
 
-### Step 3 — Gather the pipeline picture
+### Step 3 — Discover the pipeline automatically
 
-The goal is to understand every company currently in play. Use three sources:
+Do not ask the user to list companies. By the time this workflow runs, the
+accounts-setup workflow has configured MCPs and proven they work (Step 7
+smoke test). Use that plumbing now to extract the pipeline from real signals.
 
-**Source A — the profile**
-The user may have listed active companies directly in `data/profile/me.md`.
-Extract: company name, current status, any contacts or dates mentioned.
+**Precondition check.** Read `data/config/accounts.yaml → verification`. If
+`last_verified` is null or `email_read` / `calendar_read` failed, stop and
+tell the user to re-run `Update my accounts` first — without working
+connectors, this step produces empty or misleading results.
 
-**Source B — user input**
-Ask the user:
+**Source A — the profile.** Read `data/profile/me.md`. Extract any companies
+the user listed directly (name, status, contacts, dates).
 
-> "To build out your pipeline, tell me about the companies you're currently
-> in process with. For each one: company name, where you are in the process
-> (applied / recruiter call / interviews / final round), and any upcoming
-> dates I should know about.
+**Source B — automatic email back-sweep (14 days).** For each email account
+in `accounts.yaml → email.accounts` where `mcp != none`:
+- `gmail`: `search_threads` with
+  `subject:(interview OR recruiter OR hiring OR opportunity OR application OR schedule OR role OR position OR offer OR candidate) newer_than:14d`,
+  retrieve up to 100 threads.
+- `ms-graph`: equivalent query for the last 14 days, top 100.
+- `apple-mail`: `search_emails` with `since: today - 14d` (omit `account`),
+  retrieve up to 200 messages.
+
+Apply the same filter the daily sweep uses (CLAUDE.md Phase 1 sweep filter
+criteria):
+- Sender domain matches an ATS or job platform: myworkday.com, ashbyhq.com,
+  greenhouse.io, lever.co, workable.com, icims.com, jobvite.com,
+  smartrecruiters.com.
+- Sender domain matches a known company outreach pattern (recruiter@,
+  talent@, careers@, hiring@, hr@).
+- Subject contains: interview, application, recruiter, hiring, schedule,
+  availability, offer, role, position, opportunity, candidate, resume,
+  follow up, next steps, video call, phone screen, take home.
+
+Read the full body of every match. For each, extract `(company_name,
+sender_address, subject, date_received, signal_excerpt)`.
+
+**Source C — automatic calendar window sweep (−14 to +30 days).** Read
+events across `calendar.read_names` (or `read_ids`) for the window starting
+14 days ago through 30 days from now. Use the read mechanism from
+`accounts.yaml → calendar.write_mechanism` (or its read equivalent).
+
+Classify each event using the same rules as the daily sweep:
+
+| Title contains | Classification |
+|---|---|
+| recruiter, recruiting, talent acquisition, recruiter screen, recruiter chat | recruiter_screen |
+| interview, hiring manager, HM | interview |
+| panel, onsite, loop | panel |
+| coffee, chat, catch up, intro, connect, sync (when paired with a likely company name) | general_discussion |
+
+For each classified event, extract
+`(company_name, event_title, event_date, classification)`.
+
+**Source D — extract candidates and dedupe.** Merge Sources A + B + C into
+a single deduped list of candidate companies. For each company, attach:
+- `evidence`: the strongest signal (most recent calendar event, then most
+  recent email subject, then profile mention)
+- `inferred_stage`: applied using the stage table in Step 4, biased toward
+  the strongest evidence (a scheduled interview beats an old "thanks for
+  applying" email)
+- `source_count`: how many distinct signals reference this company
+
+Drop entries where `source_count == 1` AND the only signal is a generic
+job-board notification (e.g. LinkedIn job alerts, Indeed digests) — those
+are noise, not pipeline.
+
+**Source E — present for confirmation, not collection.** Show the user the
+auto-extracted list with inline evidence:
+
+> "I swept the last 14 days of your email and the −14/+30 day window of
+> your calendar. Here's what I think your pipeline looks like — add what
+> I missed, remove what isn't real, correct anything wrong:
 >
-> You can also paste any recent recruiter emails or calendar invites and
-> I'll extract the details."
+> | Company | Inferred stage | Evidence | Source |
+> |---|---|---|---|
+> | [Company] | [stage] | [event title or email subject, date] | [calendar / gmail / apple-mail / profile] |
+> | ... | ... | ... | ... |
+>
+> Anything I missed? Off-platform conversations, LinkedIn DMs, applications
+> you submitted from a different inbox, referrals in-flight?"
 
-Wait for the user's response. This is the primary data source.
-
-**Source C — web search for companies mentioned**
-For each company identified, do a quick search to confirm:
-- What the company does (if not already in a card)
-- Any recent news that's relevant (funding, layoffs, product launches)
-This is a light scan — full research happens later via "Research [company]".
+Wait for the user's response. Their job here is additive only — correct,
+remove, or extend. They are not the primary intake; the sweep is.
 
 ### Step 4 — Map each company to a pipeline stage
 

@@ -39,13 +39,32 @@ no external services required.
 
 ## Setup (~20 minutes)
 
-### 1 — Fork and clone
+### 1 — Fork, then clone
 
-```bash
-git clone https://github.com/[yourname]/[repo-name] ~/chrysalis-kb
-cd ~/chrysalis-kb
-claude
-```
+**Required.** Chrysalis stores personal job-search data. Do not clone the
+public template directly and write to it — the framework refuses to commit
+when `origin` still points at `notbotanand/Chrysalis`.
+
+1. Fork the repo: <https://github.com/notbotanand/Chrysalis/fork>
+2. Clone *your* fork (substitute your GitHub handle):
+
+   ```bash
+   git clone https://github.com/<your-handle>/Chrysalis ~/chrysalis-kb
+   cd ~/chrysalis-kb
+   claude
+   ```
+
+3. Confirm the remote points at your fork:
+
+   ```bash
+   git remote -v
+   # origin  https://github.com/<your-handle>/Chrysalis (fetch/push)
+   ```
+
+> **Prefer to keep everything local?** Skip the fork. After cloning, run
+> `git remote remove origin`. Chrysalis will detect no remote and run in
+> local-only mode (commits, no push). You give up GitHub backup; nothing
+> else changes.
 
 ### 2 — Run onboarding
 
@@ -57,13 +76,17 @@ This single command runs a three-step chain:
 
 1. **Profile** — attach your resume. Claude extracts your background, asks 4–5
    clarifying questions, and writes `data/profile/me.md`.
-2. **Accounts** — Claude lists the calendars on your Mac and asks which email
-   accounts you check for job-search mail, then writes `data/config/accounts.yaml`.
-   This is what lets Chrysalis read interview signals and write prep blocks.
-3. **Pipeline** — tell Claude about the companies you're currently in process
-   with (paste recruiter emails if you have them). Claude creates a card per
-   company, auto-researches any with an active interview process, and updates
-   the index.
+2. **Accounts** — Claude asks which email providers (Google / Outlook / Apple /
+   other) and which calendar you use, routes each to the right MCP, runs a
+   live smoke test (read 1 email, list events, create+delete a throwaway
+   event), then writes `data/config/accounts.yaml` with a verified plumbing
+   stamp. Works on Mac, Linux, or Windows — the workflow detects the host OS
+   and only offers Apple Mail / JXA paths when you're on a Mac.
+3. **Pipeline** — Claude sweeps the last 14 days of your email and a (−14, +30)
+   day window of your calendar, auto-extracts every company in flight with
+   evidence inline, and asks you to correct or extend the list. Cards get
+   created, active-stage companies are researched automatically, and the
+   index is updated.
 
 Everything is committed to your repo as it's written. Total: about 20 minutes.
 
@@ -202,16 +225,40 @@ generates a profile-aware analysis, writes the card, and updates the index.
 
 ## Email and calendar
 
-**Apple Mail MCP connector** — if you use Apple Mail, install
-`falconbradley/claude-connector-apple-mail` and configure it in `~/.claude.json`.
-Claude Code will use it to sweep recent recruiter emails and update pipeline cards.
+Chrysalis routes per provider — pick the MCPs that match the accounts you
+actually use. The accounts-setup workflow detects what's installed and what
+your host OS supports, then runs a live smoke test to confirm read + write
+work before committing the config.
 
-**Calendar** — Claude reads Apple Calendar via JXA (JavaScript for Automation)
-to check your schedule when building prep study plans and answering scheduling
-questions. No special setup needed.
+**Connector preference order** (most → least preferred). The workflow always
+tries the highest tier first and only falls back with the user's say-so:
 
-**Fallback** — if neither is connected, Claude asks you to paste or describe what's
-relevant and incorporates what you share.
+1. **First-party provider MCP** — shipped by the provider themselves. Gmail
+   MCP and Google Calendar MCP from Google, Microsoft Graph MCP from
+   Microsoft. Most reliable, most efficient, smallest auth surface.
+2. **Aggregator MCP (Composio)** — licensed third-party platform with
+   support and SLAs. Adds a hop but is the current best path for consumer
+   Outlook `@outlook.com` accounts (Microsoft's own search API rejects
+   them).
+3. **Community single-provider MCP** — open-source, maintained by the
+   community, no warranty. Example: the Apple Mail MCP
+   (`falconbradley/claude-connector-apple-mail`). Used when no Tier 1 or 2
+   exists (Apple doesn't ship an iCloud MCP).
+4. **OS-level scripting (JXA)** — Apple Calendar / Mail.app on Mac. Works
+   without any MCP install; Calendar.app event enumeration is slower.
+5. **Paste mode** — the user shares signals manually each session.
+
+| Provider | Email path (preferred → fallback) | Calendar path (preferred → fallback) | OS |
+|---|---|---|---|
+| Google | Gmail MCP → Composio Gmail → paste | Google Calendar MCP → Composio Google Calendar → paste | Mac / Linux / Windows |
+| Apple iCloud | Apple Mail MCP *(community)* → paste | JXA via Calendar.app → paste | Mac only |
+| Outlook / Microsoft 365 | MS Graph MCP *(M365 only)* → **Composio Outlook** *(consumer + enterprise; verified)* → Apple Mail MCP if Outlook is added inside Mail.app → paste | MS Graph MCP → **Composio Outlook** → JXA if subscribed inside Calendar.app → paste | Mac / Linux / Windows for MCPs; JXA Mac-only |
+| Yahoo / other | Apple Mail MCP if added to Mail.app → paste | — | Mac only |
+
+**Fallback** — if no MCP is connected for a given account, Chrysalis runs in
+paste mode: it asks you to share recent recruiter emails or upcoming events
+and incorporates what you paste. The daily Brief tells you exactly which
+accounts are connected and which are paste-only.
 
 ---
 
