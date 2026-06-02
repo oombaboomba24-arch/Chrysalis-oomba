@@ -8,6 +8,55 @@ access to everything here. No connectors, no handoffs, no middlemen.
 
 ---
 
+## Repository safety gate — runs before any write
+
+**Chrysalis must never write personal data or commit to the public template repo
+(`notbotanand/Chrysalis`). The framework is open-source; user data is not.**
+
+The very first time any workflow in this session would write a file, create a
+commit, or push, run:
+
+```bash
+git remote get-url origin 2>/dev/null || echo "NO_ORIGIN"
+```
+
+Evaluate the result:
+
+- **Matches `*notbotanand/Chrysalis(.git)?$` exactly** (the public template, not a
+  fork like `your-handle/Chrysalis` or `Chrysalis-yourname`) → **HARD STOP.** Do not
+  Write, Edit, or commit anything until resolved. Present this question via
+  `AskUserQuestion`:
+
+  > "This repo's `origin` still points at the public Chrysalis template
+  > (`notbotanand/Chrysalis`). I won't write your personal job-search data to a
+  > public template. Pick one:"
+  >
+  > 1. **Fork on GitHub (recommended).** Open
+  >    <https://github.com/notbotanand/Chrysalis/fork>, fork to your account, then
+  >    tell me the new remote URL. I'll run `git remote set-url origin <url>` and
+  >    continue.
+  > 2. **Local-only mode.** I'll run `git remote remove origin`. Commits stay on
+  >    this machine only — no GitHub backup. Confirm you accept that.
+  > 3. **Custom remote.** Give me your own remote URL and I'll point `origin` at it.
+
+  Apply the user's choice via `git remote set-url origin <url>` or
+  `git remote remove origin`, re-check, then proceed.
+
+- **`NO_ORIGIN`** (no remote configured) → safe to proceed in local-only mode.
+  Skip all `git push` calls in every subsequent workflow this session. Tell the
+  user once: "Running in local-only mode — commits stay on this machine."
+
+- **Any other remote** (user's fork, private mirror, custom remote) → proceed
+  normally.
+
+The check is cheap. Run it once per session, cache the result mentally, and
+re-run only if the user reconfigures the remote. Every write-capable workflow
+(`profile-setup`, `accounts-setup`, `onboarding-sweep`, the sweep, debrief, brief,
+research) inherits this gate — they assume it has already passed before they
+write or commit.
+
+---
+
 ## Every session: start here
 
 1. Read `framework/index.yaml` — always. This is the map: where things live (`paths:`), what they look like (`schemas:`), and the rules of the OS (`rules:`).
@@ -691,22 +740,60 @@ Always `git pull` before writing to avoid conflicts.
 **All account configuration lives in `data/config/accounts.yaml`.** Always read that file first.
 Never hardcode email addresses, account names, or calendar names in workflows.
 
-**Email:** For each account in `data/config/accounts.yaml → email.accounts`:
-- `mcp: apple-mail` → use Apple Mail MCP tools: `search_emails`, `get_email`, `list_mailboxes`.
-  Always omit the `account` parameter when calling these tools — passing the email address
-  returns empty results. Apple Mail reads all configured accounts without filtering.
-- `mcp: gmail` → use Gmail MCP tools: `search_threads`, `get_thread`. Use Gmail query syntax.
-- `mcp: none` → not yet connected. Ask user to paste signals manually, or note as gap.
+**Connector preference order — always apply per provider.** Higher tier = more
+reliable, more efficient, smaller auth surface. Never silently degrade to a
+lower tier without telling the user.
+
+1. **First-party provider MCP** (Gmail MCP, Google Calendar MCP, MS Graph MCP) —
+   shipped by the provider, native API surface.
+2. **Aggregator MCP** (Composio) — licensed third-party platform with SLAs.
+   Current best path for consumer Outlook `@outlook.com`.
+3. **Community single-provider MCP** (Apple Mail MCP) — open-source, no warranty,
+   best-effort. Used when no Tier 1/2 path exists (iCloud Mail).
+4. **OS-level scripting** (JXA on Mac for Apple Calendar / Mail.app).
+5. **Paste mode** (`mcp: none`).
+
+**Email:** For each account in `data/config/accounts.yaml → email.accounts`,
+read the `mcp:` field and route to the matching tool family:
+
+- `mcp: gmail` → first-party Gmail MCP (`search_threads`, `get_thread`). Use Gmail query syntax.
+- `mcp: composio-gmail` → Composio `GMAIL_FETCH_EMAILS` via `COMPOSIO_MULTI_EXECUTE_TOOL`. Same Gmail query syntax inside `query:`.
+- `mcp: apple-mail` → Apple Mail MCP (`search_emails`, `get_email`, `list_mailboxes`).
+  Always omit the `account` parameter — passing the email address returns empty results.
+  Apple Mail reads all configured accounts without filtering.
+- `mcp: composio-outlook` → Composio `OUTLOOK_QUERY_EMAILS` (consumer + enterprise Outlook)
+  or `OUTLOOK_SEARCH_MESSAGES` (Microsoft 365 enterprise only) via `COMPOSIO_MULTI_EXECUTE_TOOL`.
+  Filter on `receivedDateTime ge <ISO8601>` for date windows.
+- `mcp: ms-graph` → first-party Microsoft Graph MCP if registered.
+- `mcp: none` → not connected. Ask user to paste signals manually, or note as gap.
 
 If Apple Mail MCP is not active in the session (requires Claude Code restart):
-fall back to JXA via `osascript -l JavaScript` to read Mail.app directly.
+fall back to JXA via `osascript` to read Mail.app directly.
 
-**Calendar (read):** Use JXA to read from every calendar name listed in
-`data/config/accounts.yaml → calendar.read_names`. Deduplicate events by (title, date).
+**Calendar (read):** Read the events window using the `write_mechanism:` field
+to pick the read API:
+
+- `write_mechanism: google_calendar_mcp` or `composio_google_calendar` → use the
+  matching MCP's `list_events` (or `GOOGLECALENDAR_*` / `OUTLOOK_GET_CALENDAR_VIEW`).
+  Use calendar IDs from `read_ids` (not names).
+- `write_mechanism: composio_outlook` → use Composio `OUTLOOK_GET_CALENDAR_VIEW`
+  with ISO 8601 `start_datetime` / `end_datetime`.
+- `write_mechanism: ms_graph` → Microsoft Graph MCP equivalent.
+- `write_mechanism: jxa` → enumerate via JXA from every calendar name in
+  `data/config/accounts.yaml → calendar.read_names`. Deduplicate events by (title, date).
+
 Read the next 30 days. Filter to interview events and busy blocks.
 
-**Calendar (write):** Use JXA to create events in `data/config/accounts.yaml → calendar.write_target`.
-When `write_mechanism: google_calendar_mcp` is set in the future, use that MCP instead.
+**Calendar (write):** Use the configured `write_mechanism:`:
+
+- `google_calendar_mcp` / `composio_google_calendar` → MCP `create_event` against
+  `calendar.write_target` (Google Calendar ID).
+- `composio_outlook` → `OUTLOOK_CALENDAR_CREATE_EVENT` with `time_zone` set
+  (e.g. `UTC` or `America/Los_Angeles`). Capture the returned event `id` so you
+  can `OUTLOOK_DELETE_CALENDAR_EVENT` precisely if needed.
+- `ms_graph` → Microsoft Graph MCP equivalent.
+- `jxa` → temp-file JXA script writing to `calendar.write_target` (Apple
+  Calendar name). See the JXA EXECUTION RULE in the sweep section.
 
 **If no email or calendar access:** Output a clear notice in the brief for each offline
 tool: `⚠️ [Tool] sweep skipped — connector offline. Paste signals to add.`
