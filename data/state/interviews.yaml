@@ -1,1 +1,24 @@
-interviews: []
+interviews:
+  - company: "Chime"
+    card_id: "pipeline/chime"
+    round: "interview"
+    label: "Interview — identity & auth PM"
+    start: "2026-06-05T09:00:00-07:00"
+    end: "2026-06-05T10:00:00-07:00"
+    interviewer: null
+    prep_block_created: false
+    debrief_block_created: false
+    debrief_logged: false
+    outcome: pending
+
+  - company: "Adobe"
+    card_id: "pipeline/adobe"
+    round: "interview"
+    label: "Interview — Principal PM Identity (R164735)"
+    start: "2026-06-10T11:00:00-07:00"
+    end: "2026-06-10T12:00:00-07:00"
+    interviewer: null
+    prep_block_created: false
+    debrief_block_created: false
+    debrief_logged: false
+    outcome: pending
