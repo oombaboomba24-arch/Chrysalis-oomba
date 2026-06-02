@@ -39,7 +39,8 @@
       "mcp__composio__COMPOSIO_SEARCH_TOOLS",
       "mcp__composio__COMPOSIO_MULTI_EXECUTE_TOOL",
       "mcp__composio__COMPOSIO_REMOTE_BASH_TOOL",
-      "WebSearch"
+      "WebSearch",
+      "Bash(python3 framework/tools/generate_dashboard.py)"
     ]
   }
 }

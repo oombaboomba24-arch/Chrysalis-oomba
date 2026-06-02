@@ -1,5 +1,6 @@
 # Market Digest
 
-<!-- Prepend dated entries here. Format:
-- **YYYY-MM-DD · Topic:** One-sentence summary. ([Source Name, date](url))
--->
+### 2026-06-02
+- **2026-06-02 · Agentic Identity & MCP:** MCP hit 97M monthly SDK downloads; OAuth 2.1 now mandated for MCP servers; Gartner projects 40% of enterprise apps will have AI agents by end of 2026 — but only 18% of security leaders confident their identity systems can handle agent identities. ([Security Boulevard, May 2026](https://securityboulevard.com/2026/05/9-enterprise-identity-trends-that-will-define-2026-and-beyond/))
+- **2026-06-02 · Passkeys Tipping Point:** 87% of enterprises deploying passkeys; 5B passkeys in use worldwide; PCI DSS 4.0, NIS2, and DORA all mandate phishing-resistant MFA. Password reset tickets fall 60–80% post-deployment; cyber insurers offering 15–30% premium reductions for FIDO2 deployment. ([FIDO Alliance, May 2026](https://www.businesswire.com/news/home/20260506926067/en/FIDO-Alliance-Reports-Accelerating-Global-Passkey-Adoption-on-World-Passkey-Day-2026))
+- **2026-06-02 · IAM Market Growth:** Global IAM market valued at $25.34B in 2026, projected $77.92B by 2034 (15.1% CAGR). IAM PM salaries average $159K–$197K in the US. Demand for qualified professionals severely outpacing supply. ([Markets and Markets](https://www.marketsandmarkets.com/Market-Reports/identity-access-management-iam-market-1168.html))
