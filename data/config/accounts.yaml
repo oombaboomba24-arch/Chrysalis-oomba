@@ -8,9 +8,9 @@ email:
   accounts:
     - provider: outlook
       address: anand.yadav85@outlook.com
-      mcp: composio-outlook
+      mcp: outlook-mcp-local
       primary: false
-      notes: "Job search inbox. Composio MCP not yet connected — paste signals manually until Composio is set up."
+      notes: "Job search inbox. outlook-mcp-local MCP — OAuth setup required: run 'npm run setup' in ~/Developer/outlook-mcp-local."
     - provider: gmail
       address: oomba.boomba24@gmail.com
       mcp: gmail

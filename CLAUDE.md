@@ -747,9 +747,9 @@ lower tier without telling the user.
 1. **First-party provider MCP** (Gmail MCP, Google Calendar MCP, MS Graph MCP) —
    shipped by the provider, native API surface.
 2. **Aggregator MCP** (Composio) — licensed third-party platform with SLAs.
-   Current best path for consumer Outlook `@outlook.com`.
-3. **Community single-provider MCP** (Apple Mail MCP) — open-source, no warranty,
-   best-effort. Used when no Tier 1/2 path exists (iCloud Mail).
+3. **Community single-provider MCP** (outlook-mcp-local, Apple Mail MCP) — open-source, no warranty,
+   best-effort. outlook-mcp-local is the preferred path for consumer Outlook `@outlook.com`
+   when OAuth is configured. Apple Mail MCP used for iCloud Mail.
 4. **OS-level scripting** (JXA on Mac for Apple Calendar / Mail.app).
 5. **Paste mode** (`mcp: none`).
 
@@ -761,6 +761,11 @@ read the `mcp:` field and route to the matching tool family:
 - `mcp: apple-mail` → Apple Mail MCP (`search_emails`, `get_email`, `list_mailboxes`).
   Always omit the `account` parameter — passing the email address returns empty results.
   Apple Mail reads all configured accounts without filtering.
+- `mcp: outlook-mcp-local` → local Outlook MCP (`outlook_search_mail`, `outlook_list_mail`, `outlook_read_mail`).
+  Use `outlook_search_mail` with a `query:` string for keyword search plus optional `startDate:` / `endDate:`
+  (ISO-8601 date strings) for date windows. For a pure date-range listing use `outlook_list_mail` with
+  required `startDate:` and `endDate:`. Fetch full body with `outlook_read_mail` using the `messageRef:`
+  returned from search or list results.
 - `mcp: composio-outlook` → Composio `OUTLOOK_QUERY_EMAILS` (consumer + enterprise Outlook)
   or `OUTLOOK_SEARCH_MESSAGES` (Microsoft 365 enterprise only) via `COMPOSIO_MULTI_EXECUTE_TOOL`.
   Filter on `receivedDateTime ge <ISO8601>` for date windows.
